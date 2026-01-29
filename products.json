@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "name": "Double Burger",
+    "price": 9.67,
+    "ingredients": "Grilled Patty, Brioche Bun, Cheddar, Lettuce",
+    "image": "images/burger.png",
+    "alt": "Double Burger",
+    "category": "Veg-Starters",
+    "stock": 5,
+    "rating": 4
+  },
+  {
+    "id": 2,
+    "name": "Veggie Pizza",
+    "price": 10.99,
+    "ingredients": "Tomato Sauce, Mozzarella, Bell Peppers, Olives",
+    "image": "images/pizza.png",
+    "alt": "Veggie Pizza",
+    "category": "Veg-Starters",
+    "stock": 2,
+    "rating": 5
+  },
+  {
+    "id": 3,
+    "name": "Fried Chicken",
+    "price": 13.45,
+    "ingredients": "Crispy Skin, Secret Herbs, Tender Thighs",
+    "image": "images/fried-chicken.png",
+    "alt": "Fried Chicken",
+    "category": "Non-Veg Starters",
+    "stock": 3,
+    "rating": 5
+  },
+  {
+    "id": 4,
+    "name": "Chicken Roll",
+    "price": 7.50,
+    "ingredients": "Grilled Chicken, Flatbread, Lettuce, Mayo",
+    "image": "images/chicken-roll.png",
+    "alt": "Chicken Roll",
+    "category": "Non-Veg Starters",
+    "stock": 4,
+    "rating": 4
+  },
+  {
+    "id": 5,
+    "name": "Sub-Sandwich",
+    "price": 6.99,
+    "ingredients": "Lettuce, Tomato, Cucumber, Cheese, Mayo",
+    "image": "images/sandwich.png",
+    "alt": "Sub-Sandwich",
+    "category": "Veg-Starters",
+    "stock": 7,
+    "rating": 3
+  },
+  {
+    "id": 6,
+    "name": "Chicken Lasagna",
+    "price": 16.45,
+    "ingredients": "Pasta Sheets, Chicken, Bechamel Sauce, Cheese",
+    "image": "images/lasagna.png",
+    "alt": "Chicken Lasagna",
+    "category": "Non-Veg Starters",
+    "stock": 2,
+    "rating": 5
+  },
+  {
+    "id": 7,
+    "name": "Italian Spaghetti",
+    "price": 7.65,
+    "ingredients": "Pasta, Tomato Sauce, Basil, Parmesan",
+    "image": "images/spaghetti.png",
+    "alt": "Italian Spaghetti",
+    "category": "Veg-Starters",
+    "stock": 3,
+    "rating": 4
+  },
+  {
+    "id": 8,
+    "name": "Spring Roll",
+    "price": 9.31,
+    "ingredients": "Cabbage, Carrot, Spring Roll Wrapper, Soy Sauce",
+    "image": "images/spring-roll.png",
+    "alt": "Spring Roll",
+    "category": "Veg-Starters",
+    "stock": 6,
+    "rating": 5
+  }
+]
