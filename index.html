@@ -1,575 +1,1399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foodie Website</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script defer src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
+    <script
+      src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"
+      defer
+    ></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <nav class="navbar flex between wrapper">
-            <a href="#" class="logo">Foodie.</a>
+      <!-- Scroll Progress Bar -->
+      <div
+        id="scroll-progress"
+        style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 3px;
+          width: 0%;
+          background: var(--gold-finger);
+          z-index: 99999;
+          transition: width 0.1s linear;
+        "
+      ></div>
+      <nav class="navbar flex between wrapper">
+        <a href="#home" class="logo">Foodie.</a>
 
-            <ul class="navlist flex gap-3">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#menu">Menu</a></li>
-                <li><a href="#service">Service</a></li>
-                <li><a href="#about">About us</a></li>
-                <li><a href="#contact">Contact us</a></li>
-            </ul>
+        <ul class="navlist flex gap-3">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#service">Service</a></li>
+          <li><a href="#about">About us</a></li>
+          <li><a href="#contact">Contact us</a></li>
+        </ul>
 
-            <div class="desktop-action flex gap-2">
-                <a href="#" id="theme-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </a>
-                <a href="#" class="cart-icon" aria-label="Open Cart">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                    <span class="cart-value">0</span>
-                </a>
-
-                <div class="wishlist-icon" style="position: relative; cursor: pointer;"
-                    onclick="openWishlistDirectly()">
-                    <i class="fa-solid fa-heart"></i>
-                </div>
-
-                <!-- <a href="#" class="btn">Sign in &nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i></a> -->
-                <div class="user-profile-wrapper" onclick="toggleProfile()"
-                    style="cursor:pointer; display:flex; align-items:center; background: var(--gold-finger); padding: 5px 15px; border-radius: 50px; color: white; font-weight: 600; gap: 8px;">
-                    <span>Guest</span>
-                    <div
-                        style="width: 25px; height: 25px; background: rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
-                        G</div>
-                </div>
-                <!-- <div class="user-profile-wrapper" onclick="toggleUserMenu(event)">
-                    <div class="user-avatar">G</div>
-                    <div id="user-dropdown" class="user-dropdown">
-                        <p
-                            style="padding: 12px; font-weight: bold; border-bottom: 1px solid #eee; font-size: 0.9rem; color: #212121;">
-                            Hello, Guest!</p>
-                        <button onclick="showToast('Profile settings coming soon! ⚙️')">My Profile</button>
-                        <button onclick="showToast('No orders yet! 🍕')">My Orders</button>
-                        <button onclick="location.reload()" style="color: #e74c3c;">Logout</button>
-                    </div>
-                </div> -->
-                <a href="#" class="bars" aria-label="Open Menu"><i class="fa-solid fa-bars"></i></a>
+        <div class="desktop-action flex gap-2">
+          <!-- F1: Theme btn (dark mode persistent via JS) -->
+          <a href="javascript:void(0)" id="theme-btn" aria-label="Toggle Theme">
+            <i class="fa-solid fa-moon"></i>
+          </a>
+          <!-- Notification Bell -->
+          <a
+            href="javascript:void(0)"
+            id="notif-btn"
+            aria-label="Notifications"
+            style="position: relative"
+          >
+            <i class="fa-solid fa-bell"></i>
+            <span
+              id="notif-badge"
+              style="
+                display: none;
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                background: #e74c3c;
+                color: #fff;
+                font-size: 0.55rem;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+              "
+              >!</span
+            >
+          </a>
+          <a href="javascript:void(0)" class="cart-icon" aria-label="Open Cart">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span class="cart-value">0</span>
+          </a>
+          <div
+            class="wishlist-icon"
+            style="position: relative; cursor: pointer"
+            onclick="openWishlistDirectly()"
+          >
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <div
+            class="user-profile-wrapper"
+            onclick="toggleProfile()"
+            style="
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              background: var(--gold-finger);
+              padding: 5px 15px;
+              border-radius: 50px;
+              color: white;
+              font-weight: 600;
+              gap: 8px;
+            "
+          >
+            <span>Guest</span>
+            <div
+              style="
+                width: 25px;
+                height: 25px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+              "
+            >
+              G
             </div>
+          </div>
+          <a href="javascript:void(0)" class="bars" aria-label="Open Menu"
+            ><i class="fa-solid fa-bars"></i
+          ></a>
+        </div>
 
-            <ul class="mobile-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#menu">Menu</a></li>
-                <li><a href="#service">Service</a></li>
-                <li><a href="#about">About us</a></li>
-                <li><a href="#contact">Contact us</a></li>
-                <!-- <li><a href="#" class="btn">Sign in &nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
-                 -->
-                <li><a href="javascript:void(0)" onclick="toggleProfile(); closeMenu();"
-                        style="color: var(--gold-finger); font-weight: bold;"><i class="fa-solid fa-user"></i> &nbsp; My
-                        Profile</a></li>
-                <!-- <li><a href="javascript:void(0)" onclick="showToast('Profile coming soon!')" style="color: var(--gold-finger);">My Account</a></li> -->
-            </ul>
-        </nav>
+        <!-- Notification Dropdown -->
+        <div
+          id="notif-dropdown"
+          class="notif-dropdown"
+          style="display: none"
+        ></div>
+
+        <ul class="mobile-menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#service">Service</a></li>
+          <li><a href="#about">About us</a></li>
+          <li><a href="#contact">Contact us</a></li>
+          <li>
+            <a
+              href="javascript:void(0)"
+              onclick="
+                toggleProfile();
+                closeMenu();
+              "
+              style="color: var(--gold-finger); font-weight: bold"
+            >
+              <i class="fa-solid fa-user"></i>&nbsp; My Profile</a
+            >
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <main>
-        <section id="home">
-            <div class="hero-section flex wrapper gap-4">
-                <div class="content">
-                    <h1>Enjoy Your <br />Delicious <span>Food</span></h1>
-                    <p class="para">We will fill your tummy with delicious <br />food with fast delivery.</p>
-                    <div class="flex gap-2">
-                        <a href="#menu" class="btn">Order now</a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                    </div>
-                </div>
-                <div class="image-container"><img src="images/delivery-boy.png" alt="Delivery Boy" /></div>
+      <!-- HOME -->
+      <section id="home">
+        <div class="hero-section flex wrapper gap-4">
+          <div class="content">
+            <h1>Enjoy Your <br />Delicious <span>Food</span></h1>
+            <p class="para">
+              We will fill your tummy with delicious <br />food with fast
+              delivery.
+            </p>
+            <div class="flex gap-2">
+              <a href="#menu" class="btn">Order now</a>
+              <a href="javascript:void(0)" class="social-icon"
+                ><i class="fa-brands fa-x-twitter"></i
+              ></a>
+              <a href="javascript:void(0)" class="social-icon"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="javascript:void(0)" class="social-icon"
+                ><i class="fa-brands fa-facebook"></i
+              ></a>
+              <a href="javascript:void(0)" class="social-icon"
+                ><i class="fa-brands fa-google-plus-g"></i
+              ></a>
             </div>
-        </section>
-
-        <section id="service">
-            <div class="wrapper p-top">
-                <div class="text-center">
-                    <h5>Our Service</h5>
-                    <h2>How does it work?</h2>
-                </div>
-                <div class="flex text-center mt-4 gap-4">
-                    <div class="service-card">
-                        <div class="images-container"><img src="images/easy-to-order.png" alt="Easy to Order" /></div>
-                        <h3>Easy to Order</h3>
-                        <p>You only need a few steps in ordering food.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="images-container"><img src="images/fast-delivery.png" alt="Fast Delivery" /></div>
-                        <h3>Fast delivery</h3>
-                        <p>Delivery that is always ontime even faster.</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="images-container"><img src="images/best-quality.png" alt="Best Quality" /></div>
-                        <h3>Best Quality</h3>
-                        <p>Not just fast, but the best in quality too.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="menu">
-            <div class="wrapper p-top">
-                <div class="text-center">
-                    <h5>Our Menu</h5>
-                    <h2>The Most Popular</h2>
-                </div>
-
-                <!-- Search & Sort -->
-                <!-- <div class="flex gap-2 mt-3" style="flex-wrap: wrap; justify-content:center;">
-                    <input type="text" id="search-bar" placeholder="Search menu..." />
-                    <select id="sort-options">
-                        <option value="default">Sort by</option>
-                        <option value="price-low">Price: Low → High</option>
-                        <option value="price-high">Price: High → Low</option>
-                    </select>
-                </div> -->
-
-                <div class="flex gap-2 mt-3" style="flex-wrap: wrap; justify-content:center; align-items: center;">
-                    <div style="position: relative; display: flex; align-items: center;">
-                        <input type="text" id="search-bar" placeholder="Search menu..." style="padding-right: 40px;" />
-                        <i class="fa-solid fa-microphone" id="voice-btn"
-                            style="cursor:pointer; color:var(--gold-finger); font-size: 1.2rem; position: absolute; right: 15px;"></i>
-                    </div>
-
-                    <select id="sort-options">
-                        <option value="default">Sort by</option>
-                        <option value="price-low">Price: Low → High</option>
-                        <option value="price-high">Price: High → Low</option>
-                    </select>
-                </div>
-
-                <!-- Filter Buttons -->
-                <div class="filter-buttons text-center mt-3">
-                    <button data-filter="All">All</button>
-                    <button data-filter="Veg-Starters">Veg-Starters</button>
-                    <button data-filter="Non-Veg Starters">Non-Veg Starters</button>
-                </div>
-
-                <div class="advanced-filters wrapper flex gap-4 mt-3" style="justify-content: center; flex-wrap: wrap;">
-
-                    <div class="price-filter flex gap-2">
-                        <label>Price: <span id="price-val">$20</span></label>
-                        <input type="range" id="price-range" min="5" max="25" value="25" step="1">
-                    </div>
-
-                    <div class="rating-filter flex gap-2">
-                        <label>Rating:</label>
-                        <select id="rating-select" class="btn" style="padding: 5px 10px; font-size: 0.9rem;">
-                            <option value="0">All Stars</option>
-                            <option value="4">4+ Stars</option>
-                            <option value="5">5 Stars</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="card-list text-center flex mt-4 gap-3"></div>
-
-                <!-- CART TAB -->
-                <div class="cart-tab">
-
-                    <h3>Your Cart</h3>
-                    <div class="cart-list"></div>
-
-                    <!-- promo code section -->
-
-                    <div class="promo-container" style="padding: 10px; width: 100%;">
-                        <input type="text" id="promo-input" placeholder="Enter Promo Code (SAVE10)"
-                            style="width: 70%; padding: 8px; border-radius: 5px; border: 1px solid var(--gold-finger);">
-                        <button id="apply-promo" class="btn"
-                            style="padding: 8px 15px; font-size: 0.9rem;">Apply</button>
-                        <p id="promo-msg" style="font-size: 0.8rem; margin-top: 5px;"></p>
-                    </div>
-
-                    <!-- location button section -->
-                    <div class="location-container" style="padding: 0 20px 15px;">
-                        <button id="get-location" class="btn"
-                            style="width: 100%; background: #3498db; font-size: 0.9rem;">
-                            <i class="fa-solid fa-location-crosshairs"></i> Deliver to My Current Location
-                        </button>
-                        <p id="address-display"
-                            style="font-size: 0.8rem; color: #666; margin-top: 5px; text-align: center;"></p>
-                    </div>
-                    <div class="total-container">
-                        <!-- <h4>Total:</h4> -->
-                        <h4 class="cart-total">$0.00</h4>
-                    </div>
-                    <div class="btn-container flex gap-2">
-                        <a href="#" class="btn clear-btn" style="background: #e74c3c;">Clear Cart</a>
-                        <a href="#" class="btn close-btn">Close</a>
-                        <a href="#" class="btn checkout-btn">Check out</a>
-                    </div>
-                </div>
-
-                <div class="wishlist-tab">
-                    <div class="flex"
-                        style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #eee;">
-                        <h2 style="margin: 0;">Your Favorites ❤️</h2>
-                        <i class="fa-solid fa-xmark close-wishlist"
-                            style="cursor:pointer; font-size: 1.8rem; color: #333;"></i>
-                    </div>
-                    <div class="wishlist-list" style="padding: 20px;">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Reviews, App Section, Contact, Footer remain the same as before -->
-
-        <section>
-            <div class="wrapper p-top flex gap-3">
-                <div class="image-container"> <img src="images/delivery-boy-with-phone.png" /> </div>
-                <div class="review-container">
-                    <h5>Our reviews</h5>
-                    <h2>What they say?</h2>
-                    <div class="swiper mySwiper">
-                        <div class="swiper-wrapper mt-4">
-                            <div class="swiper-slide">
-                                <div class="flex gap-2">
-                                    <div class="profile"> <img src="images/profile1.jpeg" /> </div>
-                                    <div>
-                                        <h4>Guy Hawkins</h4>
-                                        <div class="mt-half"> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star-half-stroke"></i> </div>
-                                    </div>
-                                </div>
-                                <p class="para"> Foodie is the best. Besides the many delicious the service is also very
-                                    good, especially the delivery. I higly reccomend Foodie to you. </p>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="flex gap-2">
-                                    <div class="profile"> <img src="images/profile2.jpeg" /> </div>
-                                    <div>
-                                        <h4>Sophia Anderson</h4>
-                                        <div class="mt-half"> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> </div>
-                                    </div>
-                                </div>
-                                <p class="para"> Fresh ingredients, creative menu and warm service make this spot a
-                                    hidden gem. Perfect for casual dinners or special nights out. Truly a foodie's
-                                    paradise! </p>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="flex gap-2">
-                                    <div class="profile"> <img src="images/profile3.jpeg" /> </div>
-                                    <div>
-                                        <h4>Olivia Smith</h4>
-                                        <div class="mt-half"> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
-                                                class="fa-solid fa-star"></i> </div>
-                                    </div>
-                                </div>
-                                <p class="para"> Delicious dishes, cozy ambiance and exceptional service. A must-visit
-                                    for food lovers seeking bold flavors and unforgattable dining experiences. Highly
-                                    recoomended, every bite deligths! </p>
-                            </div>
-                        </div>
-                        <div class="flex between"> <a href="#" class="arrow" id="prev"> <i
-                                    class="fa-solid fa-arrow-left"></i> </a> <a href="#" class="arrow" id="next"> <i
-                                    class="fa-solid fa-arrow-right"></i> </a> </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="about">
-            <div class="wrapper p-top">
-                <div class="app-container flex">
-                    <div class="image-container">
-                        <img src="images/mobile-app.png" alt="Foodie App Mockup" class="floating-phone" />
-                    </div>
-
-                    <div class="content">
-                        <h5>Our Application</h5>
-                        <h2>Simple Way to<br /> Order Your Food</h2>
-                        <p class="para">
-                            We are currently crafting a seamless mobile experience for you.
-                            Soon, you'll be able to discover and order your favorite meals with just a single tap.
-                        </p>
-
-                        <a href="javascript:void(0)" class="btn" onclick="appComingSoon()">
-                            <i class="fa-solid fa-rocket"></i> &nbsp; App Coming Soon
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        
-        <section id="contact">
-    <div class="wrapper p-top">
-        <div class="text-center">
-            <h5>OUR SUBSCRIBER</h5>
-            <h2>Subscribe to Our Newsletter</h2>
-            <p class="para m-auto"> We recommend you to subscribe to our newspaper, drop your email <br /> below
-                to get daily update about us. </p> 
-            
-            <div class="input-container flex m-auto"> 
-                <input type="email" name="email" id="newsletter-email" placeholder="Enter your email address" autocomplete="off" /> 
-                <button onclick="handleSubscribe()" class="btn" style="border:none; cursor:pointer;">Subscribe</button> 
-            </div>
+          </div>
+          <div class="image-container">
+            <img src="images/delivery-boy.png" alt="Delivery Boy" />
+          </div>
         </div>
-    </div>
-</section>
-    </main> <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="flex wrapper gap-4">
-                <div class="footer-wrapper"> <a href="#" class="logo">Foodie.</a>
-                    <p class="mt-one-half"> We will fill your tummy <br /> with delicious food with fast delivery. </p>
-                    <div class="flex gap-2 mt-one-half"> <a href="#" class="social-icon"> <i
-                                class="fa-brands fa-x-twitter"></i> </a> <a href="#" class="social-icon"> <i
-                                class="fa-brands fa-instagram"></i> </a> <a href="#" class="social-icon"> <i
-                                class="fa-brands fa-facebook"></i> </a> <a href="#" class="social-icon"> <i
-                                class="fa-brands fa-google-plus-g"></i> </a> </div>
-                </div>
-                <ul class="footer-wrapper">
-                    <li>
-                        <h4>Our Menu</h4>
-                    </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Special</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Popular</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Categories</a> </li>
-                </ul>
-                <ul class="footer-wrapper">
-                    <li>
-                        <h4>Company</h4>
-                    </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Partner with us</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">About us</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">FAQ's</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Why Foodie</a> </li>
-                </ul>
-                <ul class="footer-wrapper">
-                    <li>
-                        <h4>Support</h4>
-                    </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Account</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Support center</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Feedback</a> </li>
-                    <li class="mt-one-half"> <a href="#" class="footer-link">Contacts</a> </li>
-                </ul>
+      </section>
+
+      <!-- SERVICE -->
+      <section id="service">
+        <div class="wrapper p-top">
+          <div class="text-center">
+            <h5>Our Service</h5>
+            <h2>How does it work?</h2>
+          </div>
+          <div class="flex text-center mt-4 gap-4">
+            <div class="service-card">
+              <div class="images-container">
+                <img src="images/easy-to-order.png" alt="Easy to Order" />
+              </div>
+              <h3>Easy to Order</h3>
+              <p>You only need a few steps in ordering food.</p>
             </div>
+            <div class="service-card">
+              <div class="images-container">
+                <img src="images/fast-delivery.png" alt="Fast Delivery" />
+              </div>
+              <h3>Fast delivery</h3>
+              <p>Delivery that is always ontime even faster.</p>
+            </div>
+            <div class="service-card">
+              <div class="images-container">
+                <img src="images/best-quality.png" alt="Best Quality" />
+              </div>
+              <h3>Best Quality</h3>
+              <p>Not just fast, but the best in quality too.</p>
+            </div>
+          </div>
         </div>
-    </footer>
+      </section>
+
+      <!-- MENU -->
+      <section id="menu">
+        <div class="wrapper p-top">
+          <div class="text-center">
+            <h5>Our Menu</h5>
+            <h2>The Most Popular</h2>
+          </div>
+
+          <!-- Search + Sort -->
+          <div
+            class="flex gap-2 mt-3"
+            style="
+              flex-wrap: wrap;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <div style="position: relative; display: flex; align-items: center">
+              <input
+                type="text"
+                id="search-bar"
+                placeholder="Search menu..."
+                style="padding-right: 40px"
+              />
+              <!-- Voice search button -->
+              <i
+                class="fa-solid fa-microphone"
+                id="voice-btn"
+                style="
+                  cursor: pointer;
+                  color: var(--gold-finger);
+                  font-size: 1.2rem;
+                  position: absolute;
+                  right: 15px;
+                  transition: 0.3s;
+                "
+              ></i>
+            </div>
+            <select id="sort-options">
+              <option value="default">Sort by</option>
+              <option value="price-low">Price: Low → High</option>
+              <option value="price-high">Price: High → Low</option>
+            </select>
+          </div>
+
+          <!-- Filter Buttons -->
+          <div class="filter-buttons text-center mt-3">
+            <button data-filter="All">🍽️ All</button>
+            <button data-filter="Veg-Starters">🥗 Veg</button>
+            <button data-filter="Non-Veg Starters">🍗 Non-Veg</button>
+          </div>
+
+          <!-- Advanced Filters -->
+          <div
+            class="advanced-filters wrapper flex gap-4 mt-3"
+            style="justify-content: center; flex-wrap: wrap"
+          >
+            <div class="price-filter flex gap-2">
+              <!-- F9: Price thumb label -->
+              <label>Price: <span id="price-val">$25</span></label>
+              <input
+                type="range"
+                id="price-range"
+                min="5"
+                max="25"
+                value="25"
+                step="1"
+              />
+            </div>
+            <div class="rating-filter flex gap-2">
+              <label>Rating:</label>
+              <select
+                id="rating-select"
+                class="btn"
+                style="padding: 5px 10px; font-size: 0.9rem"
+              >
+                <option value="0">All Stars</option>
+                <option value="4">4+ Stars</option>
+                <option value="5">5 Stars</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Card List -->
+          <div class="card-list text-center flex mt-4 gap-3"></div>
+
+          <!-- CART TAB -->
+          <div class="cart-tab">
+            <h3>Your Cart</h3>
+            <div class="cart-list"></div>
+            <div class="promo-container" style="padding: 10px; width: 100%">
+              <input
+                type="text"
+                id="promo-input"
+                placeholder="Enter Promo Code (SAVE10)"
+                style="
+                  width: 70%;
+                  padding: 8px;
+                  border-radius: 5px;
+                  border: 1px solid var(--gold-finger);
+                "
+              />
+              <button
+                id="apply-promo"
+                class="btn"
+                style="padding: 8px 15px; font-size: 0.9rem"
+              >
+                Apply
+              </button>
+              <p id="promo-msg" style="font-size: 0.8rem; margin-top: 5px"></p>
+            </div>
+            <div class="location-container" style="padding: 0 20px 15px">
+              <button
+                id="get-location"
+                class="btn"
+                style="width: 100%; background: #3498db; font-size: 0.9rem"
+              >
+                <i class="fa-solid fa-location-crosshairs"></i> Deliver to My
+                Location
+              </button>
+              <p
+                id="address-display"
+                style="
+                  font-size: 0.8rem;
+                  color: #666;
+                  margin-top: 5px;
+                  text-align: center;
+                "
+              ></p>
+            </div>
+            <div class="total-container">
+              <h4 class="cart-total">$0.00</h4>
+            </div>
+            <div class="btn-container flex gap-2">
+              <a
+                href="javascript:void(0)"
+                class="btn clear-btn"
+                style="background: #e74c3c"
+                >Clear Cart</a
+              >
+              <a href="javascript:void(0)" class="btn close-btn">Close</a>
+              <a href="javascript:void(0)" class="btn checkout-btn"
+                >Check out</a
+              >
+            </div>
+          </div>
+
+          <!-- WISHLIST TAB -->
+          <div class="wishlist-tab">
+            <div
+              class="flex"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+                border-bottom: 1px solid #eee;
+              "
+            >
+              <h2 style="margin: 0">Your Favorites ❤️</h2>
+              <i
+                class="fa-solid fa-xmark close-wishlist"
+                style="cursor: pointer; font-size: 1.8rem; color: #333"
+              ></i>
+            </div>
+            <div class="wishlist-list" style="padding: 20px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REVIEWS -->
+      <section>
+        <div class="wrapper p-top flex gap-3">
+          <div class="image-container">
+            <img src="images/delivery-boy-with-phone.png" />
+          </div>
+          <div class="review-container">
+            <h5>Our reviews</h5>
+            <h2>What they say?</h2>
+            <div class="swiper mySwiper">
+              <div class="swiper-wrapper mt-4">
+                <div class="swiper-slide">
+                  <div class="flex gap-2">
+                    <div class="profile">
+                      <img src="images/profile1.jpeg" />
+                    </div>
+                    <div>
+                      <h4>Guy Hawkins</h4>
+                      <div class="mt-half">
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="para">
+                    Foodie is the best. Besides the many delicious the service
+                    is also very good, especially the delivery. I highly
+                    recommend Foodie to you.
+                  </p>
+                </div>
+                <div class="swiper-slide">
+                  <div class="flex gap-2">
+                    <div class="profile">
+                      <img src="images/profile2.jpeg" />
+                    </div>
+                    <div>
+                      <h4>Sophia Anderson</h4>
+                      <div class="mt-half">
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="para">
+                    I love ordering from Foodie. The app is smooth, the food is
+                    always fresh and hot, and delivery is super quick. 10/10
+                    would recommend!
+                  </p>
+                </div>
+                <div class="swiper-slide">
+                  <div class="flex gap-2">
+                    <div class="profile">
+                      <img src="images/profile3.jpeg" />
+                    </div>
+                    <div>
+                      <h4>James Wilson</h4>
+                      <div class="mt-half">
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i
+                        ><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="para">
+                    Great food, reasonable prices and on-time delivery. The
+                    chicken pizza is absolutely amazing. My family's new go-to
+                    food app!
+                  </p>
+                </div>
+              </div>
+              <div class="flex between mt-4">
+                <button
+                  id="prev"
+                  class="btn"
+                  style="font-size: 1rem; padding: 0.8rem 1.5rem"
+                >
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button
+                  id="next"
+                  class="btn"
+                  style="font-size: 1rem; padding: 0.8rem 1.5rem"
+                >
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about">
+        <div class="wrapper p-top">
+          <div class="app-container flex gap-4">
+            <div class="image-container">
+              <img src="images/mobile-app.png" alt="Mobile App" />
+            </div>
+            <div>
+              <h5>About us</h5>
+              <h2>We Provide <br /><span>Quality Food</span> For You</h2>
+              <p class="para">
+                Download our mobile app and enjoy fast food delivery, exclusive
+                deals, and real-time tracking. Available soon on App Store and
+                Google Play!
+              </p>
+              <button class="btn" onclick="appComingSoon()">
+                <i class="fa-solid fa-mobile-screen-button"></i>&nbsp; Download
+                App
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEWSLETTER -->
+      <section id="contact">
+        <div class="wrapper p-top">
+          <div class="newsletter-card text-center">
+            <h5>Newsletter</h5>
+            <h2>Subscribe for <span>Exclusive Deals</span></h2>
+            <p class="para" style="margin-top: 10px">
+              Get +50 loyalty points when you subscribe!
+            </p>
+            <div class="input-container flex gap-2 mt-4">
+              <input
+                type="email"
+                id="newsletter-email"
+                placeholder="Enter your email address..."
+              />
+              <button class="btn" onclick="handleSubscribe()">
+                Subscribe Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Guest Profile Tab -->
-    <div id="profile-overlay" onclick="toggleProfile()"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:14999; backdrop-filter: blur(3px);">
-    </div>
-
-    <div class="profile-tab" id="profile-tab">
-        <div class="profile-header"
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin:0; font-size: 1.8rem;">My Profile</h2>
-            <i class="fa-solid fa-xmark close-profile" onclick="toggleProfile()"
-                style="cursor:pointer; font-size: 1.5rem; padding: 5px; color: #777; transition: 0.3s;"></i>
-        </div>
-
-        <div class="profile-content" style="padding: 20px 0; overflow-y: auto; height: 100%;">
-
-            <div class="user-info-card" onclick="changeGuestName()"
-                style="cursor:pointer; display: flex; align-items: center; gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 15px; margin-bottom: 25px;">
-
-                <div class="profile-avatar" id="main-avatar"
-                    style="width: 60px; height: 60px; background: var(--gold-finger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white;">
-                    G</div>
-
-                <div>
-                    <h4 id="guest-name-sidebar" style="margin:0;">Guest User</h4>
-                    <p style="margin:0; font-size: 0.8rem; color: #777;">guest@foodie.com</p>
-                    <span
-                        style="background: #eee; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">
-                        Guest Mode
-                    </span>
-                </div>
-            </div>
-
-            <div class="stats-container"
-                style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 30px; background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 15px;">
-                <div><span id="guest-orders-count" style="display:block; font-weight: bold;">0</span><small
-                        style="font-size: 0.7rem; color: #888;">Orders</small></div>
-                <div style="border-left: 1px solid #eee; border-right: 1px solid #eee; padding: 0 20px;">
-                    <span id="guest-wallet" style="display:block; font-weight: bold;">$50.00</span>
-                    <small style="font-size: 0.7rem; color: #888;">Wallet</small>
-                </div>
-                <div><span id="guest-points" style="display:block; font-weight: bold;">120</span><small
-                        style="font-size: 0.7rem; color: #888;">Points</small></div>
-            </div>
-
-            <div class="profile-menu-list">
-                <div class="profile-menu-item" onclick="showLastOrder()"
-                    style="display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer;">
-                    <i class="fa-solid fa-clock-rotate-left" style="width: 30px;"></i>
-                    <span style="flex:1;">Order History</span>
-                    <i class="fa-solid fa-chevron-down" id="history-arrow"
-                        style="font-size: 0.8rem; transition: 0.3s;"></i>
-                </div>
-
-                <div id="history-box"
-                    style="display:none; padding: 15px; background: #fff; border: 1px dashed var(--gold-finger); border-radius: 12px; margin-top: 5px; font-size: 0.85rem; box-shadow: inset 0 0 10px rgba(0,0,0,0.02);">
-                    <p
-                        style="margin:0 0 10px; font-weight:bold; color:var(--gold-finger); border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                        <i class="fa-solid fa-receipt"></i> Last Order Details
-                    </p>
-                    <div id="history-content" style="color: #555;">No recent orders found.</div>
-                </div>
-                <div class="profile-menu-item" onclick="document.getElementById('theme-btn').click()"
-                    style="display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer;">
-                    <i class="fa-solid fa-circle-half-stroke" style="width: 30px;"></i>
-                    <span style="flex:1;">Switch Theme</span>
-                </div>
-                <div class="profile-menu-item" onclick="handleLogout()"
-                    style="display: flex; align-items: center; padding: 15px 0; cursor: pointer; color: #e74c3c; border-top: 1px solid #f5f5f5; margin-top: 10px;">
-                    <i class="fa-solid fa-right-from-bracket" style="width: 30px;"></i>
-                    <span style="flex:1; font-weight: 500;">Logout & Reset</span>
-                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.7rem; opacity: 0.6;"></i>
-                </div>
-            </div>
-
-            <div
-                style="margin-top: 30px; background: var(--hint-yellow); padding: 20px; border-radius: 15px; text-align: center;">
-                <p style="font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;">Want 20% Discount?</p>
-                <button class="btn" onclick="showToast('Auth system coming soon!')"
-                    style="font-size: 0.8rem; width: 100%;">Sign Up Now</button>
-            </div>
-        </div>
-    </div>
-    <!-- Order Status Modal -->
-    <div id="order-status-modal" class="modal-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
-        <div style="background:#fff; padding:30px; border-radius:20px; text-align:center; max-width:400px; width:90%;">
-            <div style="font-size: 4rem; color: #2ecc71; margin-bottom: 15px;">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            <h2 style="margin-bottom: 10px;">Order Placed! 🥳</h2>
-            <p style="color:#666; margin-bottom: 20px;">Your food is being prepared. Estimated delivery in <span
-                    id="delivery-timer" style="font-weight:bold; color:var(--gold-finger);">25:00</span></p>
-
-            <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom: 20px; text-align: left;">
-                <h4 style="margin-top:0;">Summary:</h4>
-                <div id="order-summary-list"
-                    style="max-height: 100px; overflow-y: auto; font-size: 0.85rem; color:#444;"></div>
-            </div>
-
-            <button onclick="downloadReceipt()" class="btn" style="width:100%; background:#34495e; margin-bottom:10px;">
-                <i class="fa-solid fa-file-pdf"></i> Download Bill
-            </button>
-            <button onclick="closeStatusModal()" class="btn"
-                style="width:100%; background:#eee; color:#333;">Close</button>
-        </div>
-    </div>
-    <!-- Product Details Modal -->
-    <div id="quick-view-modal" class="modal-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; backdrop-filter: blur(5px);">
-        <div class="modal-content"
-            style="background:#fff; padding:0; border-radius:20px; width:95%; max-width:450px; position:relative; overflow:hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
-
-            <span onclick="closeQuickView()"
-                style="position:absolute; top:15px; right:15px; font-size:1.8rem; cursor:pointer; background:rgba(255,255,255,0.8); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:10;">&times;</span>
-
-            <div style="width:100%; height:280px; overflow:hidden; background:#f9f9f9;">
-                <img id="modal-img" src=""
-                    style="width:100%; height:100%; object-fit: contain; padding: 20px; transition: transform 0.3s;">
-            </div>
-
-            <div style="padding: 25px; text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h2 id="modal-name" style="margin:0; font-size: 1.6rem; color:#222;"></h2>
-                    <span id="modal-badge"
-                        style="padding: 4px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase;"></span>
-                </div>
-
-                <div id="modal-stars-display" style="color:var(--gold-finger); margin-bottom: 15px; font-size: 0.9rem;">
-                </div>
-
-                <p style="color:#555; font-size:0.95rem; line-height:1.5; margin-bottom: 15px;">
-                    Our signature <span id="modal-item-name-inline" style="font-weight: 600;"></span> is made with
-                    premium ingredients, secret spices, and served fresh to your doorstep. 🥗🔥
-                </p>
-
-                <!-- <div style="background: #fdf7e2; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
-                <p style="margin:0; font-size: 0.8rem; color: #8d6e63;"><strong>Main Ingredients:</strong> Fresh Produce, House Special Sauce, Organic Herbs.</p>
-            </div> -->
-
-                <div style="background: #fdf7e2; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
-                    <p style="margin:0; font-size: 0.8rem; color: #8d6e63;">
-                        <strong>Main Ingredients:</strong>
-                        <span id="modal-ingredients">Loading...</span>
-                    </p>
-                </div>
-
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <h3 id="modal-price" style="color:var(--gold-finger); font-size: 1.8rem; margin:0;"></h3>
-                    <button id="modal-add-btn" class="btn"
-                        style="padding: 12px 30px; border-radius: 12px; font-weight: 600;">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="login-modal" class="modal-overlay"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10001; justify-content:center; align-items:center; backdrop-filter: blur(8px);">
-        <div style="background:#fff; padding:30px; border-radius:20px; width:90%; max-width:400px; position:relative;">
-            <span onclick="closeLogin()"
-                style="position:absolute; top:15px; right:15px; font-size:1.5rem; cursor:pointer; color:#777;">&times;</span>
-
-            <h2 id="auth-title" style="text-align:center; margin-bottom:10px; color:#333;">Welcome Back! 🍕</h2>
-            <p id="auth-desc" style="text-align:center; color:#777; font-size:0.9rem; margin-bottom:25px;">Please enter
-                your details to login</p>
-
-            <form id="auth-form">
-                <div id="name-field" style="display:none; margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; font-weight:600; font-size:0.9rem;">Full
-                        Name</label>
-                    <input type="text" id="user-fullname" placeholder="John Doe"
-                        style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px; outline:none;">
-                </div>
-
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; font-weight:600; font-size:0.9rem;">Email
-                        Address</label>
-                    <input type="email" id="user-email" required placeholder="name@example.com"
-                        style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px; outline:none;">
-                </div>
-
-                <div style="margin-bottom:20px;">
-                    <label style="display:block; margin-bottom:5px; font-weight:600; font-size:0.9rem;">Password</label>
-                    <input type="password" required placeholder="••••••••"
-                        style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px; outline:none;">
-                </div>
-
-                <button type="submit" id="auth-submit-btn" class="btn"
-                    style="width:100%; padding:12px; border-radius:10px; font-weight:bold;">Login</button>
-            </form>
-
-            <p style="text-align:center; margin-top:20px; font-size:0.85rem; color:#666;">
-                <span id="toggle-text">Don't have an account?</span>
-                <a href="javascript:void(0)" onclick="toggleAuthMode()" id="toggle-link"
-                    style="color:var(--gold-finger); font-weight:bold; text-decoration:none;">Sign Up</a>
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-top">
+        <div class="wrapper footer-grid">
+          <!-- Brand -->
+          <div class="footer-brand">
+            <a href="#home" class="logo">Foodie.</a>
+            <p>
+              We fill your tummy with delicious food and lightning-fast
+              delivery. Order now and taste the difference!
             </p>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-    
-</body>
+            <div class="footer-socials">
+              <a href="javascript:void(0)" aria-label="Twitter"
+                ><i class="fa-brands fa-x-twitter"></i
+              ></a>
+              <a href="javascript:void(0)" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="javascript:void(0)" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+              <a href="javascript:void(0)" aria-label="Google+"
+                ><i class="fa-brands fa-google-plus-g"></i
+              ></a>
+            </div>
+          </div>
 
+          <!-- Our Menu -->
+          <div class="footer-col">
+            <h4>Our Menu</h4>
+            <ul>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Special</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Popular</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Categories</a
+                >
+              </li>
+              <li>
+                <a href="#menu"
+                  ><i class="fa-solid fa-chevron-right"></i> Full Menu</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Company -->
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Partner with us</a
+                >
+              </li>
+              <li>
+                <a href="#about"
+                  ><i class="fa-solid fa-chevron-right"></i> About us</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> FAQ's</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Why Foodie</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Account</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Support Center</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Feedback</a
+                >
+              </li>
+              <li>
+                <a href="javascript:void(0)"
+                  ><i class="fa-solid fa-chevron-right"></i> Contacts</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+              <li>
+                <i class="fa-solid fa-location-dot"></i> 123 Food Street, Flavor
+                Town
+              </li>
+              <li><i class="fa-solid fa-phone"></i> +1 (800) FOODIE</li>
+              <li>
+                <i class="fa-solid fa-envelope"></i>
+                <a
+                  href="/cdn-cgi/l/email-protection"
+                  class="__cf_email__"
+                  data-cfemail="d2bab7bebebd92b4bdbdb6bbb7fcb1bdbf"
+                  >[email&#160;protected]</a
+                >
+              </li>
+              <li><i class="fa-solid fa-clock"></i> Mon–Sun: 8am – 11pm</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="wrapper footer-bottom-inner">
+          <p>© 2025 <span>Foodie.</span> All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <a href="javascript:void(0)">Privacy Policy</a>
+            <a href="javascript:void(0)">Terms of Service</a>
+            <a href="javascript:void(0)">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Profile Overlay -->
+    <div
+      id="profile-overlay"
+      onclick="toggleProfile()"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 14999;
+        backdrop-filter: blur(3px);
+      "
+    ></div>
+
+    <!-- Guest Profile Tab -->
+    <div class="profile-tab" id="profile-tab">
+      <div
+        class="profile-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+        "
+      >
+        <h2 style="margin: 0; font-size: 1.8rem">My Profile</h2>
+        <i
+          class="fa-solid fa-xmark"
+          onclick="toggleProfile()"
+          style="
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 5px;
+            color: #777;
+            transition: 0.3s;
+          "
+        ></i>
+      </div>
+
+      <div
+        class="profile-content"
+        style="padding: 20px 0; overflow-y: auto; height: calc(100% - 80px)"
+      >
+        <!-- User Info -->
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+          "
+        >
+          <!-- Avatar — only opens file picker -->
+          <div style="position: relative; flex-shrink: 0">
+            <div
+              id="main-avatar"
+              style="
+                width: 60px;
+                height: 60px;
+                background: var(--gold-finger);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: white;
+                overflow: hidden;
+              "
+            >
+              G
+            </div>
+            <label
+              for="avatar-upload"
+              style="
+                position: absolute;
+                bottom: -2px;
+                right: -2px;
+                width: 22px;
+                height: 22px;
+                background: #333;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                border: 2px solid #fff;
+              "
+            >
+              <i
+                class="fa-solid fa-camera"
+                style="font-size: 0.55rem; color: #fff"
+              ></i>
+            </label>
+            <input
+              type="file"
+              id="avatar-upload"
+              accept="image/*"
+              style="display: none"
+              onchange="handleAvatarUpload(event)"
+            />
+          </div>
+          <!-- Name/email — only this triggers name change -->
+          <div
+            onclick="changeGuestName()"
+            style="cursor: pointer; flex: 1"
+            title="Click to edit name"
+          >
+            <h4 id="guest-name-sidebar" style="margin: 0">Guest User</h4>
+            <p
+              id="guest-email-sidebar"
+              style="margin: 0; font-size: 0.8rem; color: #777"
+            >
+              guest@foodie.com
+            </p>
+            <span
+              id="guest-mode-badge"
+              style="
+                background: #eee;
+                font-size: 0.65rem;
+                padding: 2px 8px;
+                border-radius: 4px;
+                text-transform: uppercase;
+              "
+              >Guest Mode</span
+            >
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div
+          id="profile-stats-box"
+          style="
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-bottom: 30px;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 15px;
+          "
+        >
+          <div>
+            <span
+              id="guest-orders-count"
+              style="display: block; font-weight: bold"
+              >0</span
+            ><small style="font-size: 0.7rem; color: #888">Orders</small>
+          </div>
+          <div
+            style="
+              border-left: 1px solid #eee;
+              border-right: 1px solid #eee;
+              padding: 0 20px;
+            "
+          >
+            <span id="guest-wallet" style="display: block; font-weight: bold"
+              >$50.00</span
+            >
+            <small style="font-size: 0.7rem; color: #888">Wallet</small>
+          </div>
+          <div>
+            <span id="guest-points" style="display: block; font-weight: bold"
+              >120</span
+            ><small style="font-size: 0.7rem; color: #888">Points</small>
+          </div>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="profile-menu-list">
+          <div
+            onclick="showLastOrder()"
+            style="
+              display: flex;
+              align-items: center;
+              padding: 15px 0;
+              border-bottom: 1px solid #f5f5f5;
+              cursor: pointer;
+            "
+          >
+            <i class="fa-solid fa-clock-rotate-left" style="width: 30px"></i>
+            <span style="flex: 1">Order History</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem"></i>
+          </div>
+
+          <!-- F12: Order Again inside history -->
+          <div
+            id="history-box"
+            style="
+              display: none;
+              padding: 15px;
+              background: #fff;
+              border: 1px dashed var(--gold-finger);
+              border-radius: 12px;
+              margin-top: 5px;
+              font-size: 0.85rem;
+            "
+          >
+            <p
+              style="
+                margin: 0 0 10px;
+                font-weight: bold;
+                color: var(--gold-finger);
+                border-bottom: 1px solid #eee;
+                padding-bottom: 5px;
+              "
+            >
+              <i class="fa-solid fa-receipt"></i> Order History
+            </p>
+            <div id="history-content" style="color: #555">
+              No recent orders found.
+            </div>
+          </div>
+
+          <div
+            onclick="document.getElementById('theme-btn').click()"
+            style="
+              display: flex;
+              align-items: center;
+              padding: 15px 0;
+              border-bottom: 1px solid #f5f5f5;
+              cursor: pointer;
+            "
+          >
+            <i class="fa-solid fa-circle-half-stroke" style="width: 30px"></i>
+            <span style="flex: 1">Switch Theme</span>
+          </div>
+
+          <!-- F3: Recently Viewed -->
+          <div class="recently-viewed-section">
+            <h5>
+              <i class="fa-solid fa-eye" style="margin-right: 6px"></i>RECENTLY
+              VIEWED
+            </h5>
+            <div id="recently-viewed-list"></div>
+          </div>
+
+          <div
+            onclick="handleLogout()"
+            style="
+              display: flex;
+              align-items: center;
+              padding: 15px 0;
+              cursor: pointer;
+              color: #e74c3c;
+              border-top: 1px solid #f5f5f5;
+              margin-top: 10px;
+            "
+          >
+            <i class="fa-solid fa-right-from-bracket" style="width: 30px"></i>
+            <span style="flex: 1; font-weight: 500">Logout & Reset</span>
+            <i
+              class="fa-solid fa-triangle-exclamation"
+              style="font-size: 0.7rem; opacity: 0.6"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Sign Up Banner -->
+        <div
+          id="profile-signup-banner"
+          style="
+            margin-top: 30px;
+            background: var(--hint-yellow);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+          "
+        >
+          <p style="font-size: 0.85rem; font-weight: bold; margin-bottom: 10px">
+            Want 20% Discount?
+          </p>
+          <button
+            class="btn"
+            onclick="openLoginModal()"
+            style="font-size: 0.8rem; width: 100%"
+          >
+            Sign Up Now 🎁
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Status Modal -->
+    <div
+      id="order-status-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          background: #fff;
+          padding: 30px;
+          border-radius: 20px;
+          text-align: center;
+          max-width: 400px;
+          width: 90%;
+        "
+      >
+        <div style="font-size: 4rem; color: #2ecc71; margin-bottom: 15px">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h2 style="margin-bottom: 10px">Order Placed! 🥳</h2>
+        <p style="color: #666; margin-bottom: 20px">
+          Estimated delivery in
+          <span
+            id="delivery-timer"
+            style="font-weight: bold; color: var(--gold-finger)"
+            >25:00</span
+          >
+        </p>
+        <div
+          style="
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+          "
+        >
+          <h4 style="margin-top: 0">Order Summary:</h4>
+          <div
+            id="order-summary-list"
+            style="
+              max-height: 100px;
+              overflow-y: auto;
+              font-size: 0.85rem;
+              color: #444;
+            "
+          ></div>
+        </div>
+        <button
+          onclick="downloadReceipt()"
+          class="btn"
+          style="width: 100%; background: #34495e; margin-bottom: 10px"
+        >
+          <i class="fa-solid fa-file-pdf"></i> Download Bill
+        </button>
+        <button
+          onclick="closeStatusModal()"
+          class="btn"
+          style="width: 100%; background: #eee; color: #333"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Quick View Modal — F13 calories, F14 share -->
+    <div
+      id="quick-view-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+      "
+    >
+      <div
+        class="modal-content"
+        style="
+          background: #fff;
+          padding: 0;
+          border-radius: 20px;
+          width: 95%;
+          max-width: 450px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        "
+      >
+        <span
+          onclick="closeQuickView()"
+          style="
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.9);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          "
+          >&times;</span
+        >
+
+        <div
+          style="
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            background: #f9f9f9;
+          "
+        >
+          <img
+            id="modal-img"
+            src=""
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              padding: 20px;
+              transition: transform 0.3s;
+            "
+          />
+        </div>
+
+        <div style="padding: 25px; text-align: left">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 8px;
+            "
+          >
+            <h2
+              id="modal-name"
+              style="margin: 0; font-size: 1.6rem; color: #222"
+            ></h2>
+            <span
+              id="modal-badge"
+              style="
+                padding: 4px 10px;
+                border-radius: 5px;
+                font-size: 0.7rem;
+                font-weight: bold;
+                text-transform: uppercase;
+              "
+            ></span>
+          </div>
+
+          <div
+            id="modal-stars-display"
+            style="
+              color: var(--gold-finger);
+              margin-bottom: 10px;
+              font-size: 0.9rem;
+            "
+          ></div>
+
+          <!-- F13: Calories -->
+          <div
+            id="modal-calories"
+            style="
+              font-size: 0.8rem;
+              color: #e67e22;
+              margin-bottom: 10px;
+              font-weight: 600;
+            "
+          ></div>
+
+          <p
+            style="
+              color: #555;
+              font-size: 0.95rem;
+              line-height: 1.5;
+              margin-bottom: 15px;
+            "
+          >
+            Our signature
+            <span id="modal-item-name-inline" style="font-weight: 600"></span>
+            is crafted with premium ingredients, secret spices, and served fresh
+            to your doorstep. 🥗🔥
+          </p>
+
+          <div
+            style="
+              background: #fdf7e2;
+              padding: 10px;
+              border-radius: 10px;
+              margin-bottom: 18px;
+            "
+          >
+            <p style="margin: 0; font-size: 0.8rem; color: #8d6e63">
+              <strong>Main Ingredients:</strong>
+              <span id="modal-ingredients">Loading...</span>
+            </p>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              gap: 10px;
+            "
+          >
+            <h3
+              id="modal-price"
+              style="color: var(--gold-finger); font-size: 1.8rem; margin: 0"
+            ></h3>
+            <div style="display: flex; gap: 8px">
+              <!-- F14: Share button -->
+              <button id="modal-share-btn" class="modal-share-btn">
+                <i class="fa-solid fa-share-nodes"></i> Share
+              </button>
+              <button
+                id="modal-add-btn"
+                class="btn"
+                style="
+                  padding: 12px 24px;
+                  border-radius: 12px;
+                  font-weight: 600;
+                "
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div
+      id="login-modal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10001;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(8px);
+      "
+    >
+      <div
+        style="
+          background: #fff;
+          padding: 30px;
+          border-radius: 20px;
+          width: 90%;
+          max-width: 400px;
+          position: relative;
+        "
+      >
+        <span
+          onclick="closeLogin()"
+          style="
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+          "
+          >&times;</span
+        >
+        <h2
+          id="auth-title"
+          style="text-align: center; margin-bottom: 10px; color: #333"
+        >
+          Welcome Back! 🍕
+        </h2>
+        <p
+          id="auth-desc"
+          style="
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+          "
+        >
+          Please enter your details to login
+        </p>
+        <div id="auth-form">
+          <div id="name-field" style="display: none; margin-bottom: 15px">
+            <label
+              style="
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 0.9rem;
+              "
+              >Full Name</label
+            >
+            <input
+              type="text"
+              id="user-fullname"
+              placeholder="John Doe"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                outline: none;
+              "
+            />
+          </div>
+          <div style="margin-bottom: 15px">
+            <label
+              style="
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 0.9rem;
+              "
+              >Email Address</label
+            >
+            <input
+              type="email"
+              id="user-email"
+              placeholder="name@example.com"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                outline: none;
+              "
+            />
+          </div>
+          <div style="margin-bottom: 20px">
+            <label
+              style="
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 0.9rem;
+              "
+              >Password</label
+            >
+            <input
+              type="password"
+              id="user-password"
+              placeholder="••••••••"
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                outline: none;
+              "
+            />
+          </div>
+          <button
+            onclick="handleAuthSubmit()"
+            class="btn"
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 10px;
+              font-weight: bold;
+              border: none;
+              cursor: pointer;
+            "
+          >
+            Login
+          </button>
+        </div>
+        <p
+          style="
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+          "
+        >
+          <span id="toggle-text">Don't have an account?</span>
+          <a
+            href="javascript:void(0)"
+            onclick="toggleAuthMode()"
+            id="toggle-link"
+            style="
+              color: var(--gold-finger);
+              font-weight: bold;
+              text-decoration: none;
+            "
+            >Sign Up</a
+          >
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
