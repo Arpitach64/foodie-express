@@ -1,50 +1,102 @@
 [
   {
     "id": 1,
-    "name": "Double Burger",
-    "price": 9.67,
-    "ingredients": "Grilled Patty, Brioche Bun, Cheddar, Lettuce",
+    "name": "Classic Burger",
+    "category": "Non-Veg Starters",
+    "price": 8.99,
+    "stock": 15,
+    "rating": 4,
     "image": "images/burger.png",
-    "alt": "Double Burger",
-    "category": "Veg-Starters",
-    "stock": 5,
-    "rating": 4
+    "ingredients": "Beef Patty, Lettuce, Tomato, Pickles, Special Sauce, Sesame Bun",
+    "badge": "Best Seller",
+    "calories": 620
   },
   {
     "id": 2,
-    "name": "Veggie Pizza",
-    "price": 10.99,
-    "ingredients": "Tomato Sauce, Mozzarella, Bell Peppers, Olives",
-    "image": "images/pizza.png",
-    "alt": "Veggie Pizza",
+    "name": "Margherita Pizza",
     "category": "Veg-Starters",
-    "stock": 2,
-    "rating": 5
+    "price": 11.99,
+    "stock": 10,
+    "rating": 5,
+    "image": "images/pizza.png",
+    "ingredients": "Mozzarella Cheese, Fresh Tomatoes, Basil, Olive Oil, Hand-Tossed Dough",
+    "badge": "Chef's Pick",
+    "calories": 780
   },
   {
     "id": 3,
-    "name": "Fried Chicken",
-    "price": 13.45,
-    "ingredients": "Crispy Skin, Secret Herbs, Tender Thighs",
-    "image": "images/fried-chicken.png",
-    "alt": "Fried Chicken",
+    "name": "Crispy Fried Chicken",
     "category": "Non-Veg Starters",
-    "stock": 3,
-    "rating": 5
+    "price": 9.49,
+    "stock": 12,
+    "rating": 4,
+    "image": "images/fried-chicken.png",
+    "ingredients": "Chicken Thighs, Buttermilk Marinade, Spiced Flour Coating, Hot Sauce",
+    "badge": "Fan Favorite",
+    "calories": 540
   },
   {
     "id": 4,
-    "name": "Chicken Roll",
-    "price": 7.50,
-    "ingredients": "Grilled Chicken, Flatbread, Lettuce, Mayo",
-    "image": "images/chicken-roll.png",
-    "alt": "Chicken Roll",
-    "category": "Non-Veg Starters",
-    "stock": 4,
-    "rating": 4
+    "name": "Veggie Spring Rolls",
+    "category": "Veg-Starters",
+    "price": 6.49,
+    "stock": 20,
+    "rating": 4,
+    "image": "images/spring-roll.png",
+    "ingredients": "Cabbage, Carrots, Mushrooms, Glass Noodles, Soy Sauce, Crispy Wrapper",
+    "badge": "Healthy Choice",
+    "calories": 210
   },
   {
     "id": 5,
+    "name": "BBQ Chicken Wings",
+    "category": "Non-Veg Starters",
+    "price": 12.99,
+    "stock": 8,
+    "rating": 5,
+    "image": "images/wings.png",
+    "ingredients": "Chicken Wings, Smoky BBQ Glaze, Garlic Butter, Honey, Chilli Flakes",
+    "badge": "🔥 Spicy Hit",
+    "calories": 680
+  },
+  {
+    "id": 6,
+    "name": "Paneer Tikka",
+    "category": "Veg-Starters",
+    "price": 10.49,
+    "stock": 14,
+    "rating": 4,
+    "image": "images/paneer.png",
+    "ingredients": "Fresh Paneer, Yogurt Marinade, Bell Peppers, Onions, Tandoor Spices",
+    "badge": "Chef's Pick",
+    "calories": 390
+  },
+  {
+    "id": 7,
+    "name": "Loaded Fries",
+    "category": "Veg-Starters",
+    "price": 5.99,
+    "stock": 25,
+    "rating": 4,
+    "image": "images/fries.png",
+    "ingredients": "Crispy Potato Fries, Cheese Sauce, Jalapeños, Sour Cream, Spring Onions",
+    "badge": "Best Value",
+    "calories": 480
+  },
+  {
+    "id": 8,
+    "name": "Chicken Shawarma",
+    "category": "Non-Veg Starters",
+    "price": 9.99,
+    "stock": 18,
+    "rating": 5,
+    "image": "images/shawarma.png",
+    "ingredients": "Marinated Chicken, Garlic Sauce, Pickled Veggies, Pita Bread, Sumac",
+    "badge": "New Arrival",
+    "calories": 560
+  },
+  {
+    "id": 9,
     "name": "Sub-Sandwich",
     "price": 6.99,
     "ingredients": "Lettuce, Tomato, Cucumber, Cheese, Mayo",
@@ -52,10 +104,12 @@
     "alt": "Sub-Sandwich",
     "category": "Veg-Starters",
     "stock": 7,
-    "rating": 3
+    "rating": 3,
+    "badge": "Healthy Choice",
+    "calories": 310
   },
   {
-    "id": 6,
+    "id": 10,
     "name": "Chicken Lasagna",
     "price": 16.45,
     "ingredients": "Pasta Sheets, Chicken, Bechamel Sauce, Cheese",
@@ -63,10 +117,12 @@
     "alt": "Chicken Lasagna",
     "category": "Non-Veg Starters",
     "stock": 2,
-    "rating": 5
+    "rating": 5,
+    "badge": "Chef's Pick",
+    "calories": 720
   },
   {
-    "id": 7,
+    "id": 11,
     "name": "Italian Spaghetti",
     "price": 7.65,
     "ingredients": "Pasta, Tomato Sauce, Basil, Parmesan",
@@ -74,17 +130,21 @@
     "alt": "Italian Spaghetti",
     "category": "Veg-Starters",
     "stock": 3,
-    "rating": 4
+    "rating": 4,
+    "badge": "Best Value",
+    "calories": 430
   },
   {
-    "id": 8,
-    "name": "Spring Roll",
+    "id": 12,
+    "name": "Chicken Roll",
     "price": 9.31,
-    "ingredients": "Cabbage, Carrot, Spring Roll Wrapper, Soy Sauce",
-    "image": "images/spring-roll.png",
-    "alt": "Spring Roll",
-    "category": "Veg-Starters",
+    "ingredients": "Shredded Chicken, Capsicum, Onion, Roll Wrapper, Chilli Sauce",
+    "image": "images/chicken-roll.png",
+    "alt": "Chicken Roll",
+    "category": "Non-Veg Starters",
     "stock": 6,
-    "rating": 5
+    "rating": 5,
+    "badge": "Fan Favorite",
+    "calories": 380
   }
 ]
